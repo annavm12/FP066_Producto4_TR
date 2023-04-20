@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainPage</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <!-- Bootstrap 5.1.3 CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap 5.1.3 JS, Popper, and Bootstrap 4 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="..\css\style_tareas_pendientes.css" />
+</head>
+
+
+<body>
+  <div>
+    <!--navegador-->
+    <div class="navegador">
+      <nav class="navbar navbar-expand-sm">
+        <a class="navbar-brand" href="#">
+          <img src="..\assets\media\R-removebg-preview.png" alt="Logo de la página" width="50" height="50" />Week
+          Planner</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="home_page.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="main_dashboard.html">Mi Calendario</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+
+
+  <!-- Botón para abrir el modal -->
+  <div class="d-flex">
+    <div class="barra mr-3">
+      <button type="button" class="btn btn-primary custom-btn" data-toggle="modal" data-target="#modal-tarea">
+        Nueva Tarea
+      </button>
+    </div>
+    <div class="container" id="container-tareas">
+
+      <script src="../js/crear_tarea.js"></script>
+    </div>
+  </div>
+  <!--columnas semanales-->
+  <div class="cont-semana">
+    <div class="columna" id="lunes" ondrop="drop(event)" ondragover="allowDrop(event)">Lunes
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="martes" ondrop="drop(event)" ondragover="allowDrop(event)">Martes
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="miercoles" ondrop="drop(event)" ondragover="allowDrop(event)">Miércoles
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="jueves" ondrop="drop(event)" ondragover="allowDrop(event)">Jueves
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="viernes" ondrop="drop(event)" ondragover="allowDrop(event)">Viernes
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="sabado" ondrop="drop(event)" ondragover="allowDrop(event)">Sábado
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+    <div class="columna" id="domingo" ondrop="drop(event)" ondragover="allowDrop(event)">Domingo
+      <button type="button" class="btn-secondary" id="btn-col" data-toggle="modal" data-target="#modal-tarea">+</button>
+    </div>
+  </div>
+  <script src="../js/dragdrop.js"></script>
+
+  <!-- Bootstrap 4 CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+
+  <!-- Bootstrap 4 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="modal-tarea" tabindex="-1" role="dialog" aria-labelledby="modal-tarea-titulo"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-tarea-titulo">Añadir nueva tarea</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Formulario -->
+          <form id="formulario">
+            <div class="form-group">
+              <label for="tarea-input">Nombre Tarea:</label>
+              <input type="text" class="form-control" id="tarea-input" required>
+            </div>
+            <div class="form-group">
+              <label for="time-input">Hora Inicio:</label>
+              <input type="time" class="form-control" id="time-inicio-input" required>
+            </div>
+            <div class="form-group">
+              <label for="time-input">Hora Final:</label>
+              <input type="time" class="form-control" id="time-final-input" required>
+            </div>
+            <div class="form-group">
+              <label for="descripcion-input">Descripción:</label>
+              <textarea class="form-control" id="descripcion-input" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="colaboradores-input">Colaboradores:</label>
+              <input type="text" class="form-control" id="colaboradores-input" required>
+            </div>
+            <div class="form-group">
+              <label for="prioridad">Prioridad:</label>
+              <select id="prioridad" name="prioridad">
+                <option value="#E40066">Alta</option>
+                <option value="#EAC435">Media</option>
+                <option value="#345995">Baja</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contenedor">Elige día dónde crear la tarea:</label>
+              <select id="contenedor-select" name="contenedor">
+                <option value="container-tareas">Ninguno</option>
+                <optgroup label="Días de la semana">
+                  <option value="lunes">Lunes</option>
+                  <option value="martes">Martes</option>
+                  <option value="miercoles">Miércoles</option>
+                  <option value="jueves">Jueves</option>
+                  <option value="viernes">Viernes</option>
+                  <option value="sabado">Sábado</option>
+                  <option value="domingo">Domingo</option>
+                </optgroup>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="error-message" style="display: none;">Por favor rellene todos los campos.</div>
+        <div class="modal-footer">
+          <button type="button" id="cancelar-btn" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" id="aceptar-btn" class="btn btn-primary" onclick="crearTarea(); ">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal eliminar tarea-->
+
+  <div class="modal" id="eliminar-modal" tabindex="-1" role="dialog" aria-labelledby="eliminar-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eliminar-modal-label">Es necesario confirmar la eliminación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de querer eliminar la tarea?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="cancelar-eliminar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</body>
+
+</html>

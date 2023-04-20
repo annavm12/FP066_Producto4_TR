@@ -1,0 +1,151 @@
+html{
+    background-color: #F6F1D1;
+}
+
+.navegador nav {
+    background-color: #40798C;
+    text-align: center;
+    padding: 0.5rem 1rem;
+  }
+  
+.navbar-brand, .navbar-nav .nav-link {
+    color: #fffF;
+  }
+  
+.navbar-brand:hover, .navbar-nav .nav-link:hover {
+    color: #0B2027;
+  }
+  a.navbar-brand {
+    font-size: 22pt;
+}
+  
+.navbar-brand {
+    padding-left: 25px;
+    font-size: 22pt;
+  }
+  
+.navbar-nav {
+    margin-left: auto;
+    padding-right: 25px;
+    font-size: 16pt;
+  }
+  
+  
+.navbar-brand img {
+    margin-right: 10px;
+  }
+
+.modal-content {
+    background-color: #40798C !important;
+    color: #FFFFFF !important;
+  }
+.modal-title {
+    font-size: 18pt !important;
+    color: #FFFFFF !important;
+  }
+
+.custom-btn {
+    background-color: #70A9A1 !important;
+    color: #000000 !important;
+    border-color: #70A9A1 !important;
+    font-size: 14pt !important;
+    padding: 10px 30px !important;
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-bottom: 50px;
+}
+
+.custom-btn:hover {
+    background-color: #40798C !important;
+    color: #FFFFFF !important;
+    border-color: #40798C !important;
+}
+
+.d-flex{
+    background-color: #F6F1D1;
+    padding: 0%;
+}
+
+.container-fluid {
+    margin: 0%;
+    background-color: #CFD7C7;
+    padding: 20px;
+  }
+  
+  .card {
+    max-width: 150px;
+    overflow: auto;
+    flex-grow: 1;
+    margin: 5px;
+    padding: 0px !important;
+  }
+
+.card-text {
+    font-size: 12px;
+    margin: 5px;
+    padding: 0px !important;
+
+  }
+  .card-body{
+    margin: 5px;
+    padding: 0px !important;
+
+  }
+  #container-tareas {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start; 
+    overflow-x: auto;
+  }
+
+  #btn-col{
+    background-color: #70A9A1 !important;
+    color: #000000 !important;
+    border-color: #70A9A1 !important;
+    font-size: 10pt !important;
+    padding: 10px!important;
+    border: #0B2027 solid 2px;
+  }
+  #btn-col:hover {
+    background-color: #40798C !important;
+    color: #FFFFFF !important;
+    border-color: #40798C !important;
+}
+  
+  .cont-semana {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F6F1D1;
+  }
+  .columna {
+    width: calc(100% / 7);
+    font-size: 16pt;
+    background-color: #70A9A1;
+    vertical-align: top;
+    margin: 0;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    min-height: 500px;
+    max-height: 750px; 
+    overflow-y: auto;
+    text-align: center;
+  }
+  #aceptar-btn{
+    background-color: #70A9A1 !important;
+    color: #FFFFFF !important;
+  }
+  #cancelar-btn{
+    background-color: #CFD7C7 !important ;
+    color: #000000 !important;}
+
+
+  
+    
+
+
+
+
+
