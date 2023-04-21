@@ -1,3 +1,4 @@
+
 function crearCard() {
 
     const form = document.querySelector('form');
@@ -30,6 +31,8 @@ function crearCard() {
 // Crear el elemento card 
     let card = document.createElement("div");
     card.className = "card";
+    let cardId = "card-" + Date.now().toString();
+    card.setAttribute("id", cardId);
     card.style.backgroundColor = color;
     card.style.width = "320px";
     card.style.height = "250px";
@@ -111,6 +114,7 @@ function crearCard() {
     contenedor.appendChild(card);
     // Resetear el formulario
     document.getElementById("formulario").reset();
+
 }
 
 
