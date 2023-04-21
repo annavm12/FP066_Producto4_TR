@@ -1,3 +1,5 @@
+//import { guardarTarjeta } from '../app/controllers/semanacontroller';
+const mongoose = require('mongoose')
 
 function crearCard() {
 
@@ -116,6 +118,3 @@ function crearCard() {
     document.getElementById("formulario").reset();
 
 }
-
-
-    
