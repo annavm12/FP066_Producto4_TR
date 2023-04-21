@@ -1,8 +1,8 @@
-import { Tarjeta } from '../models/semana';
+import { Semana } from '../models/semana';
 
-export function guardarTarjeta(id,semana, anio, descripcion, mes, horas, color) {
+export function guardarSemana(id,semana, anio, descripcion, mes, horas, color) {
   // Crear la instancia del modelo Tarjeta con los valores de los inputs
-  const nuevaTarjeta = new Tarjeta({
+  const nuevaSemana = new Semana({
     id: id,
     semana: semana,
     anio: anio,
@@ -13,11 +13,11 @@ export function guardarTarjeta(id,semana, anio, descripcion, mes, horas, color) 
   });
 
   // Guardar la nueva tarjeta en la base de datos
-  nuevaTarjeta.save(function(err, tarjetaGuardada) {
+  nuevaSemana.save(function(err, semanaGuardada) {
     if (err) {
       console.error(err);
     } else {
-      console.log('Tarjeta guardada:', tarjetaGuardada);
+      console.log('Semana guardada:', semanaGuardada);
     }
   });
 }

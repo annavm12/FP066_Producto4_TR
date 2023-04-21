@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CardSchema = new mongoose.Schema({
+const tareaSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   horaInicio: { type: String, required: true },
   horaFinal: { type: String, required: true },
@@ -10,4 +10,4 @@ const CardSchema = new mongoose.Schema({
   contenedor: { type: mongoose.Schema.Types.ObjectId, ref: "Container" },
 });
 
-module.exports = mongoose.model("Card", CardSchema);
+module.exports = mongoose.model("Tarea", tareaSchema);
