@@ -1,3 +1,5 @@
+//import { guardarTarjeta } from "../app/controllers/semanacontroller";
+const mongoose = require('mongoose')
 
 function crearCard() {
 
@@ -25,9 +27,6 @@ function crearCard() {
     fondo.className = "fondo";
     fondo.style.backgroundColor = "#F6F1D1";
 
-    
-
-
 // Crear el elemento card 
     let card = document.createElement("div");
     card.className = "card";
@@ -37,6 +36,7 @@ function crearCard() {
     card.style.width = "320px";
     card.style.height = "250px";
 
+    //guardarTarjeta(id, semana, anio, descripcion, mes, horas, color);
 
     // Crear el contenido de la card
     let cardBody = document.createElement("div");

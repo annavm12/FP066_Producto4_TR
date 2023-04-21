@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const tarjetaSchema = new mongoose.Schema({
+const semanaSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
@@ -32,6 +32,6 @@ const tarjetaSchema = new mongoose.Schema({
   }
 });
 
-const Tarjeta = mongoose.model('Tarjeta', tarjetaSchema);
+const Semana = mongoose.model('Semana', semanaSchema);
 
-module.exports = Tarjeta;
+module.exports = Semana;
