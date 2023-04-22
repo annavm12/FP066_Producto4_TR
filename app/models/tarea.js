@@ -7,6 +7,7 @@ const tareaSchema = new mongoose.Schema({
   descripcion: { type: String, required: true },
   colaboradores: { type: String, required: true },
   prioridad: { type: String, required: true },
+  complete: { type: Boolean},
   contenedor: { type: mongoose.Schema.Types.ObjectId, ref: "Container" },
 });
 

@@ -72,27 +72,29 @@ function crearTarea() {
     eliminarBtn.style.backgroundColor= "#40798C";
     eliminarBtn.style.marginLeft= "10";
 
+    
 
-    eliminarBtn.addEventListener("click", function() {
-        // Obtener el modal de confirmación
-        let modal = document.getElementById("eliminar-modal");
-      
-        // Añadir el evento "click" al botón "Eliminar" del modal
-        let confirmarEliminarBtn = modal.querySelector(".btn-danger");
-        
-        // Crear función para eliminar la card
-        function eliminarCard() {
-          card.remove();
-          $(modal).modal("hide");
-          confirmarEliminarBtn.removeEventListener("click", eliminarCard);
-        }
-      
-        // Agregar evento a botón "Eliminar" del modal
-        confirmarEliminarBtn.addEventListener("click", eliminarCard);
-        
-        // Mostrar el modal de confirmación
-        $(modal).modal("show");
-      });
+
+    // Añadir el evento "click" al botón2
+    eliminarBtn.addEventListener("click", function(){
+      // Obtener el modal de confirmación
+      let modal = document.getElementById("eliminar-modal");
+  
+      // Añadir el evento "click" al botón "Eliminar" del modal
+      function eliminarCard() {
+        card.remove();
+        $(modal).modal("hide");
+        confirmarEliminarBtn.removeEventListener("click", eliminarCard);
+      }
+
+      // Agregar evento a botón "Eliminar" del modal
+      confirmarEliminarBtn.addEventListener("click", eliminarCard);
+      eliminarBtn.addEventListener("click", function() {
+      // Mostrar el modal de confirmación
+      $(modal).modal("hide");
+      $(modal).modal("show");
+    });
+  });
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
