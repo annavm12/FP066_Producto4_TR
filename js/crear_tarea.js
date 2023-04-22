@@ -72,6 +72,7 @@ function crearTarea() {
     eliminarBtn.style.backgroundColor= "#40798C";
     eliminarBtn.style.marginLeft= "10";
 
+    
 
     eliminarBtn.addEventListener("click", function() {
         // Obtener el modal de confirmación
