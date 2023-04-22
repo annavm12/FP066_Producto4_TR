@@ -1,4 +1,4 @@
-const Semana = require('../models/Semana');
+const Semana = require('../models/semana');
 
 const obtenerSemanas = async (req, res) => {
   try {
@@ -39,4 +39,22 @@ const eliminarSemana = async (req, res) => {
 };
 
 module.exports = { eliminarSemana };
+
+const actualizarSemana = async (req, res) => {
+  try {
+    const semanaActualizada = await Semana.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!semanaActualizada) {
+      return res.status(404).json({ mensaje: 'Semana no encontrada' });
+    }
+    res.json(semanaActualizada);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al actualizar la semana' });
+  }
+};
+
+module.exports = { actualizarSemana };
 

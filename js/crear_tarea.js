@@ -81,6 +81,9 @@ function crearTarea() {
       let modal = document.getElementById("eliminar-modal");
   
       // Añadir el evento "click" al botón "Eliminar" del modal
+      let confirmarEliminarBtn = modal.querySelector(".btn-danger");
+
+      //crear función para eliminar la card
       function eliminarCard() {
         card.remove();
         $(modal).modal("hide");
