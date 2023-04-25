@@ -123,7 +123,7 @@ const typeDefs = gql`
 
 const Semana = require('../models/semana');
 const Tarea = require('../models/tarea');
-
+//esto es del producto 3, pero me recomendaban hacerlo ahora... Lo dejo ya realiazado
 const resolvers = {
   Query: {
     semanas: async () => {
