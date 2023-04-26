@@ -1,4 +1,4 @@
-const Tarea = require('../models/tarea');
+/*const Tarea = require('../models/tarea');
 
 const obtenerTarea = async (req, res) => {
   try {
@@ -56,5 +56,5 @@ const actualizarTarea = async (req, res) => {
   }
 };
 
-module.exports = { actualizarTarea };
+module.exports = { actualizarTarea };*/
 

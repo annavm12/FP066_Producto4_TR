@@ -1,18 +1,8 @@
-<<<<<<< Updated upstream
-module.exports = {
-    MONGODB_URI: 'mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/?retryWrites=true&w=majority',
-    MONGODB_OPTIONS: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-  };
-
-=======
 const mongoose = require("mongoose");
 const config = require("./config");
 
 // const MONGODB_URI = 'mongodb://¨{config.MONGODB_DATABASE}';
-const MONGODB_URI= 'mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/test'
+const MONGODB_URI= 'mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/?retryWrites=true&w=majority'
 
 mongoose
     .connect(MONGODB_URI, {
@@ -23,4 +13,3 @@ mongoose
  })
  .then((db) => console.log("Mongodb is connected to", db.connection.host))
  .catch ((err) => console.error (err));
->>>>>>> Stashed changes

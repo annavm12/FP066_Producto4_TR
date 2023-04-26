@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+/*const mongoose = require("mongoose");
 
 const tareaSchema = new mongoose.Schema({
   nombre: { type: String, required: true },

@@ -1,4 +1,4 @@
-const Semana = require('../models/semana');
+/*const Semana = require('../models/semana');
 
 const obtenerSemanas = async (req, res) => {
   try {
@@ -58,3 +58,4 @@ const actualizarSemana = async (req, res) => {
 
 module.exports = { actualizarSemana };
 
+*/

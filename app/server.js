@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { ApolloServer, gql } = require('apollo-server-express');
@@ -11,26 +11,12 @@ const tareaController = require('./controllers/tareacontroller');
 
 const Semana = require('./models/semana');
 const Tarea = require('./models/tarea');
+const config = require('./config/config');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
 
 //conexion
 mongoose.connect(MONGODB_URI, MONGODB_OPTIONS);
 
-// Rutas para Semanas
-app.get('/semana', semanaController.crearSemana);
-app.post('/semana', semanaController.obtenerSemanas);
-app.put('/semana/:id', semanaController.eliminarSemana); 
-app.delete('/semana/:id', semanaController.actualizarSemana); 
-
-// Rutas para Tareas
-app.get('/tarea', tareaController.obtenerTarea);
-app.post('/tarea', tareaController.crearTarea);
-app.put('/tarea/:id', tareaController.actualizarTarea); 
-app.put('/tarea', tareaController.actualizarTarea); 
-app.delete('/tarea/:id', tareaController.actualizarTarea); 
 
 
 //Definicion schemes GraphQL
@@ -83,7 +69,6 @@ const typeDefs = gql`
         colaboradores: String!
         prioridad: String!
         complete: Boolean!
-        contenedor: Container
       }
       
       input NuevaTareaInput {
@@ -121,8 +106,6 @@ const typeDefs = gql`
       }
       `;      
 
-const Semana = require('../models/semana');
-const Tarea = require('../models/tarea');
 //esto es del producto 3, pero me recomendaban hacerlo ahora... Lo dejo ya realiazado
 const resolvers = {
   Query: {
@@ -195,13 +178,22 @@ const resolvers = {
       }
     }
   }
-};
+};*/
 
-module.exports = resolvers;
 
-const server = new ApolloServer({ typeDefs, resolvers });
-server.applyMiddleware({ app });
+const server = new ApolloServer({ typeDefs, resolvers});
 
-app.listen(4000, () => {
-  console.log(`Servidor de GraphQL corriendo en http://localhost:4000${server.graphqlPath}`);
-});
+const { url } =  startStandaloneServer(server, {
+
+  listen: { port: config.PORT },
+
+
+}).then(( data)=>console.log(data));
+
+
+console.log(`🚀  Server ready at: ${url}`);
+
+
+
+
+

@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 
 function crearCard() {
 
@@ -113,5 +112,23 @@ function crearCard() {
     contenedor.appendChild(card);
     // Resetear el formulario
     document.getElementById("formulario").reset();
+
+
+}
+
+function guardarTarjeta(id, semana, anio, descripcion, mes, horas, color){
+    // Creamos un objeto con la información que queremos enviar
+    var datos = {id, semana, anio, descripcion, mes, horas, color};
+
+    // Enviamos el objeto al servidor
+    $.ajax({
+        url: "http://localhost:3000/semana",
+        type: "POST",
+        data: datos,
+        success: function(respuesta) {
+            // Aquí puedes manejar la respuesta del servidor
+            console.log(respuesta);
+        }
+    });
 
 }

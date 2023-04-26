@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 
 const semanaSchema = new mongoose.Schema({
   id: {
@@ -34,4 +34,4 @@ const semanaSchema = new mongoose.Schema({
 
 const Semana = mongoose.model('Semana', semanaSchema);
 
-module.exports = Semana;
+module.exports = Semana;*/
