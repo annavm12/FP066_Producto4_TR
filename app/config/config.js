@@ -1,5 +1,3 @@
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLNonNull } = require('graphql');
-
 export const typeDefs = `
   type Semana {
     _id: ID!
