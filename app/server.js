@@ -26,7 +26,7 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
     app.get('/semana', semanaController.obtenerSemanas);
     app.post('/semana', semanaController.crearSemana);
     app.put('/semana/:id', semanaController.actualizarSemana);
-    app.delete('/semana/:id', semanaController.eliminarSemana);      app.get('/tarea', tareaController.obtenerTarea);
+    app.delete('/semana/:id', semanaController.eliminarSemana);    
     app.get('/tarea/:id', tareaController.obtenerTarea);
     app.get('/tarea', tareaController.obtenerTareas);
     app.post('/tarea', tareaController.crearTarea);
