@@ -1,6 +1,8 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 
 // Conectar a la base de datos de MongoDB
 mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/test', {
@@ -10,22 +12,27 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
   .then(() => console.log('Conectado a la base de datos'))
   .catch((error) => console.log('Error al conectar a la base de datos:', error));
 
-  const Semana = require('./models/semana');
-  const Tarea = require('./models/tarea');
-  const semanaController = require('./controllers/semanacontroller');
-  const tareaController = require ('./controllers/tareacontroller');
+  const Semana = require('./models/semana.js');
+  const Tarea = require('./models/tarea.js');
+  const semanaController = require('./controllers/semanacontroller.js');
+  const tareaController = require ('./controllers/tareacontroller.js');
 
   // Crear una instancia de Express
     const app = express();
+    app.use(cors());
+    app.use(express.json());
 
-  app.get('/semana',semanaController.obtenerSemanas);
-  app.post('/semana',semanaController.crearSemana);
-  app.put('/semana/:id', semanaController.actualizarSemana);
-  app.delete('/semana/:id', semanaController.eliminarSemana);
-
-  app.get('tarea', tareaController.obtenerTarea);
-  app.post('tarea', tareaController.crearTarea);
-
+    app.get('/semana/:id', semanaController.obtenerSemana);
+    app.get('/semana', semanaController.obtenerSemanas);
+    app.post('/semana', semanaController.crearSemana);
+    app.put('/semana/:id', semanaController.actualizarSemana);
+    app.delete('/semana/:id', semanaController.eliminarSemana);      app.get('/tarea', tareaController.obtenerTarea);
+    app.get('/tarea/:id', tareaController.obtenerTarea);
+    app.get('/tarea', tareaController.obtenerTareas);
+    app.post('/tarea', tareaController.crearTarea);
+    app.put('/tarea/:id', tareaController.actualizarTarea);
+    app.delete('/tarea/:id', tareaController.eliminarTarea);
+    
 
  const typeDefs = `
   type Semana {
@@ -91,8 +98,6 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
 type Query {
   obtenerSemana(id: ID!): Semana
   obtenerSemanas: [Semana!]!
-}
-type Query {
   obtenerTarea(id: ID!): Tarea
   obtenerTareas: [Tarea!]!
 }

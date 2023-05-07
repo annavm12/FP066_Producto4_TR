@@ -15,7 +15,7 @@ module.exports = { obtenerTarea };
 const crearTarea = async (req, res) => {
   try {
     const nuevaTarea = new Tarea(req.body);
-    const tareaGuardada = await nuevaTarea.save();
+    await nuevaTarea.save();
     res.json(tareaGuardada);
   } catch (error) {
     console.error(error);
