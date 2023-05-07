@@ -1,3 +1,4 @@
+
 function crearCard() {
 
     const form = document.querySelector('form');
@@ -24,16 +25,16 @@ function crearCard() {
     fondo.className = "fondo";
     fondo.style.backgroundColor = "#F6F1D1";
 
-    
-
-
 // Crear el elemento card 
     let card = document.createElement("div");
     card.className = "card";
+    let cardId = "card-" + Date.now().toString();
+    card.setAttribute("id", cardId);
     card.style.backgroundColor = color;
     card.style.width = "320px";
     card.style.height = "250px";
 
+    //guardarTarjeta(id, semana, anio, descripcion, mes, horas, color);
 
     // Crear el contenido de la card
     let cardBody = document.createElement("div");
@@ -111,7 +112,23 @@ function crearCard() {
     contenedor.appendChild(card);
     // Resetear el formulario
     document.getElementById("formulario").reset();
+
+
 }
 
+function guardarTarjeta(id, semana, anio, descripcion, mes, horas, color){
+    // Creamos un objeto con la información que queremos enviar
+    var datos = {id, semana, anio, descripcion, mes, horas, color};
 
-    
+    // Enviamos el objeto al servidor
+    $.ajax({
+        url: "http://localhost:3000/semana",
+        type: "POST",
+        data: datos,
+        success: function(respuesta) {
+            // Aquí puedes manejar la respuesta del servidor
+            console.log(respuesta);
+        }
+    });
+
+}

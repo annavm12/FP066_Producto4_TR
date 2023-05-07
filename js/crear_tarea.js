@@ -72,6 +72,7 @@ function crearTarea() {
     eliminarBtn.style.backgroundColor= "#40798C";
     eliminarBtn.style.marginLeft= "10";
 
+    
 
     eliminarBtn.addEventListener("click", function() {
         // Obtener el modal de confirmación
@@ -89,10 +90,12 @@ function crearTarea() {
       
         // Agregar evento a botón "Eliminar" del modal
         confirmarEliminarBtn.addEventListener("click", eliminarCard);
-        
+        eliminarBtn.addEventListener("click", function() {
         // Mostrar el modal de confirmación
+        $(modal).modal("hide");
         $(modal).modal("show");
       });
+    });
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -114,7 +117,7 @@ function crearTarea() {
     cardBody.appendChild(horaFinalTarea);
     cardBody.appendChild(descripcionTarea);
     cardBody.appendChild(colaboradoresTarea);
-   
+
     card.appendChild(cardBody);    
     card.appendChild(cardFooter);
     

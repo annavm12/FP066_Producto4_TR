@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const semanaSchema = new mongoose.Schema({
-  numeroSemana: {
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  semana: {
     type: Number,
     required: true
   },
@@ -22,16 +27,11 @@ const semanaSchema = new mongoose.Schema({
     required: true
   },
   color: {
-    type: Object,
-    required: true,
-    default: {
-      background: '#FFFFFF',
-      text: '#000000'
-    }
+    type: String,
+    required: true
   }
 });
 
 const Semana = mongoose.model('Semana', semanaSchema);
 
 module.exports = Semana;
-
