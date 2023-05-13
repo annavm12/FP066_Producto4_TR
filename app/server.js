@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
     app.use(cors());
     app.use(express.json());
 
-    app.get('/semana/:id', semanaController.obtenerSemana);
+    app.get('/semana/:id', semanaController.obtenerSemanas);
     app.get('/semana', semanaController.obtenerSemanas);
     app.post('/semana', semanaController.crearSemana);
     app.put('/semana/:id', semanaController.actualizarSemana);
@@ -34,7 +34,7 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
     app.delete('/tarea/:id', tareaController.eliminarTarea);
     
 
- const typeDefs = `
+const typeDefs = `
   type Semana {
     _id: ID!
     semana: Int!
