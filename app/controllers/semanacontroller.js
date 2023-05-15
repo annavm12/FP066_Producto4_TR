@@ -1,6 +1,10 @@
 const Semana = require('../models/semana');
 
-const obtenerSemanas = async (req, res) => {
+
+//PRUEBO OTRA MANERA MAS ABAJO PORQUE ME DA PROBLEMAS EN EL SERVER !!! 
+
+
+/*const obtenerSemanas = async (req, res) => {
   try {
     const semanas = await Semana.find();
     res.json(semanas);
@@ -56,5 +60,35 @@ const actualizarSemana = async (req, res) => {
   }
 };
 
-module.exports = { actualizarSemana };
+module.exports = { actualizarSemana };*/
+
+const semanaController ={};
+
+semanaController.getSemana = async (req,res) =>{
+  const semanas = await Semana.find();
+  resizeTo.json(semanas);
+};
+
+semanaController.createSemana = async (req,res)=>{
+  const newSemana = new Semana(req.body);
+  await newSemana.save();
+  res.status(201).json(newSemana);
+};
+
+semanaController.updateSemana=async (req,res) =>{
+  const semanaId = req.params.id;
+  const updateSemana =await Semana.findByIdAndUpdate(semanaId, req.body, {new: true});
+  res.json(updateSemana);
+}
+
+semanaController.deleteSemana = async (req, res)=>{
+  const semanaId = req.params.id;
+  await Semana.findByIdAndDelete(semanaId);
+  res.status(204).json({message: 'semana borrada'});
+};
+
+module.exports = semanaController;
+
+
+
 
