@@ -1,4 +1,3 @@
-var dato;
 
 function refrescarTareas(){
   fetch('http://localhost:3000/graphql',{
