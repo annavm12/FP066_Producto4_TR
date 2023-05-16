@@ -54,7 +54,7 @@ const upload = multer({guardado});
 
 const typeDefs = `
   type Semana {
-    _id: ID!
+    id: ID!
     semana: Int!
     anio: Int!
     descripcion: String!
@@ -63,6 +63,7 @@ const typeDefs = `
     color: String!
   }
   type Tarea {
+    id: ID!
     nombre: String!
     horaInicio: String!
     horaFinal: String!
@@ -70,6 +71,7 @@ const typeDefs = `
     colaboradores: String!
     prioridad: String!
     complete: Boolean
+    archivo: String
   }
     
   input NuevaSemanaInput {
