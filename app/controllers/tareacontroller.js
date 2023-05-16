@@ -1,6 +1,9 @@
 const Tarea = require('../models/tarea');
 
-const obtenerTarea = async (req, res) => {
+
+//PRUEBO OTRA MANERA MAS ABAJO PORQUE ME DA PROBLEMAS EN EL SERVER !!! 
+
+/*const obtenerTarea = async (req, res) => {
   try {
     const tarea = await Tarea.find();
     res.json(tarea);
@@ -56,5 +59,38 @@ const actualizarTarea = async (req, res) => {
   }
 };
 
-module.exports = { actualizarTarea };
+module.exports = { actualizarTarea };*/
 
+
+const tareaController = {};
+
+tareaController.getTareas = async (req, res) =>{
+  const tareas = await Tarea.find();
+  res.json(tareas);
+};
+
+tareaController.createTarea = async (req, res) =>{
+  const newTarea = new Tarea(req.body);
+  await newTarea.save();
+  res.status(201).json(newTarea);
+};
+
+tareaController.deleteTarea =async (req, res) => {
+  const tareaId = req.params.id;
+  await Tarea.findByIdAndDelete(tareaId);
+  res.status(204).json({message: 'tarea eliminada'});
+};
+
+tareaController.updateTarea = async (req, res) =>{
+  const tareaId = req.params.id;
+  const updatedTarea = await Tarea.findByIdAndUpdate(tareaId, req.body, {new : true});
+  res.json(updatedTarea);
+};
+
+tareaController.updateTareas = async (req,res)=>{
+  const updatedTareas = await Tarea.updateMany({}, req.body);
+  res.json(updatedTareas);
+};
+
+
+module.exports = tareaController;

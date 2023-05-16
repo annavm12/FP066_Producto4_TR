@@ -1,7 +1,9 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer,gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const socketio = require('socket.io');
+const multer = require('multer');
 
 
 // Conectar a la base de datos de MongoDB
@@ -12,6 +14,19 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
   .then(() => console.log('Conectado a la base de datos'))
   .catch((error) => console.log('Error al conectar a la base de datos:', error));
 
+
+//guardar archivos en local
+const guardado = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null,'assets/');
+  },
+  filename: (req, file, cb)=>{
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({guardado});
+
+//controladores y modelos  
   const Semana = require('./models/semana.js');
   const Tarea = require('./models/tarea.js');
   const semanaController = require('./controllers/semanacontroller.js');
@@ -21,22 +36,25 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
     const app = express();
     app.use(cors());
     app.use(express.json());
+    app.use(express.urlencoded({extended: true}));
 
-    app.get('/semana/:id', semanaController.obtenerSemanas);
-    app.get('/semana', semanaController.obtenerSemanas);
-    app.post('/semana', semanaController.crearSemana);
-    app.put('/semana/:id', semanaController.actualizarSemana);
-    app.delete('/semana/:id', semanaController.eliminarSemana);    
-    app.get('/tarea/:id', tareaController.obtenerTarea);
-    app.get('/tarea', tareaController.obtenerTareas);
-    app.post('/tarea', tareaController.crearTarea);
-    app.put('/tarea/:id', tareaController.actualizarTarea);
-    app.delete('/tarea/:id', tareaController.eliminarTarea);
+    app.get('/semana/', semanaController.getSemana);
+    app.post('/semana', semanaController.createSemana);
+    app.put('/semana/:id', semanaController.updateSemana);
+    app.delete('/semana/:id', semanaController.deleteSemana);    
+    app.get('/tarea/:id', tareaController.getTareas);
+    app.post('/tarea', tareaController.createTarea);
+    app.put('/tarea/:id', tareaController.updateTarea);
+    app.put('/tarea', tareaController.updateTareas)
+    app.delete('/tarea/:id', tareaController.deleteTarea);
+    app.post('tareas/upload', upload.single('archivo'), (req,res)=>{
+      res.send('Archivo guardado');
+    });
     
 
 const typeDefs = `
   type Semana {
-    _id: ID!
+    id: ID!
     semana: Int!
     anio: Int!
     descripcion: String!
@@ -44,17 +62,18 @@ const typeDefs = `
     horas: Int!
     color: String!
   }
-    type Tarea {
-      nombre: String!
-      horaInicio: String!
-      horaFinal: String!
-      descripcion: String!
-      colaboradores: String!
-      prioridad: String!
-      complete: Boolean
-    }
+  type Tarea {
+    id: ID!
+    nombre: String!
+    horaInicio: String!
+    horaFinal: String!
+    descripcion: String!
+    colaboradores: String!
+    prioridad: String!
+    complete: Boolean
+    archivo: String
+  }
     
-
   input NuevaSemanaInput {
     semana: Int!
     anio: Int!
@@ -105,8 +124,6 @@ type Mutation {
   nuevaSemana(input: NuevaSemanaInput): Semana
   actualizarSemana(input: ActualizarSemanaInput): Semana
   eliminarSemana(id: ID!): ID
-}
-type Mutation {
   nuevaTarea(input: NuevaTareaInput): Tarea
   actualizarTarea(input: ActualizarTareaInput): Tarea
   eliminarTarea(id: ID!): ID
@@ -172,6 +189,8 @@ module.exports = resolvers;
 
 // Crear un servidor Apollo
 const server = new ApolloServer({ typeDefs, resolvers });
+const {createServer} = require('http');
+const {Server} = require('socket.io');
 
 
 
@@ -181,8 +200,23 @@ async function startServer() {
   server.applyMiddleware({ app });
 }
 
+const httpServer = createServer(app);
+const io = new Server(httpServer,{
+  cors:{ 
+  origin:'*'},
+});
+
+io.on('connection', (socket)=>{
+  console.log('conectado', socket.id);
+
+  socket.on('disconnect', () =>{
+    console.log('desconectado', socket.id);
+  });
+});
+httpServer.listen(3000, () => console.log('Servidor iniciado'));
+
 startServer();
 
 // Iniciar el servidor Express
-app.listen(3000, () => console.log('Servidor iniciado'));
+//app.listen(3000, () => console.log('Servidor iniciado'));
 

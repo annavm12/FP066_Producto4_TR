@@ -1,3 +1,37 @@
+
+function refrescarTareas(){
+  fetch('http://localhost:3000/graphql',{
+    method: 'POST',
+    headers: {
+      'Content-Type':'application/json',
+      'Accept' : 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+        query{
+          tarea{
+            id
+            nombre
+            horaInicio
+            horaFinal
+            descripcion
+            colaboradores
+            prioridad
+            complete
+            archivo
+          }
+        }`,
+    }),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    const tareas = data.data.tarea;
+    tareas.forEach((tarea) => crearTarea(tarea));
+  });
+}
+
+
 function crearTarea() {
 
     // obtener valores de los inputs del formulario
@@ -19,6 +53,61 @@ function crearTarea() {
       return;
   }
   
+    // Crear el objeto de datos para enviar en la solicitud
+    const tareaData = {
+      nombre,
+      horaInicio,
+      horaFinal,
+      descripcion,
+      colaboradores,
+      prioridad
+    };
+  
+    // Realizar la solicitud de creación de la tarea al servidor
+  fetch("http://localhost:3000/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      query: `
+        mutation {
+          crearTarea(input: {
+            nombre: "${tareaData.nombre}",
+            horaInicio: "${tareaData.horaInicio}",
+            horaFinal: "${tareaData.horaFinal}",
+            descripcion: "${tareaData.descripcion}",
+            colaboradores: "${tareaData.colaboradores}",
+            prioridad: "${tareaData.prioridad}"
+          }) {
+            id
+            nombre
+            horaInicio
+            horaFinal
+            descripcion
+            colaboradores
+            prioridad
+            complete
+            archivo
+          }
+        }
+      `
+    })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const nuevaTarea = data.data.crearTarea;
+      console.log("Nueva tarea creada:", nuevaTarea);
+      
+      // Mostrar la nueva tarea en la página
+      mostrarTarea(nuevaTarea);
+    })
+    .catch((error) => {
+      console.error("Error al crear la tarea:", error);
+    });
+
+
     // Crear el elemento card con un id único
     let card = document.createElement("div");
     let cardId = "card-" + Date.now().toString();
@@ -82,8 +171,30 @@ function crearTarea() {
         let confirmarEliminarBtn = modal.querySelector(".btn-danger");
         
         // Crear función para eliminar la card
-        function eliminarCard() {
-          card.remove();
+        function eliminarCard(id) {
+          const deleteTareaQuery = `
+            mutation{
+              deleteTarea(id: "${id}"){
+                id
+                nombre
+              }
+            }`;
+          fetch('http://localhost:3000/graphql',{
+            method: 'POST',
+            headers: {
+              'Content-Type' : 'application/json',
+              'Accept' : 'application/json',
+            },
+            body: JSON.stringify({query: deleteTareaQuery}),
+          })
+          .then((response)=>response.json())
+          .then((data) =>{
+            const deletedTarea = data.data.deleteTarea;
+            console.log('tarea borrada', deletedTarea);
+            refrescarTareas();
+            location.reload();
+          })
+          card.remove(id);
           $(modal).modal("hide");
           confirmarEliminarBtn.removeEventListener("click", eliminarCard);
         }
