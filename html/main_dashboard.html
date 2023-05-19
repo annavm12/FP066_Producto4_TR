@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MainPage</title>
+  <html>
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>MainPage</title>
       <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-    crossorigin="anonymous"/>
-    <script src= ..js/crear_semana.js></script>
-    <link rel="stylesheet" href="..\css\style_main_dashboard.css" />
-  </head>
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+        crossorigin="anonymous"
+      />
+      <link rel="stylesheet" href="..\css\style_main_dashboard.css" />
+    </head>
   <body>
     <div>
       <div class="navegador">
@@ -95,21 +96,10 @@
           </div>
         </div>
       </div>
-      <!-- Bootstrap 4 CSS -->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-        <!-- Bootstrap 4 -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+      
       <!--para añadir las tarjetas y el script de enlace a crear_semana.js-->
       <div class="fondocontainer">
-        <div class="container" id="contenedor-cards">
-        <script src="../js/crear_semana.js"></script>
-        
+        <div class="container" id="contenedor-cards">        
         </div>
       </div>
       <!--modal eliminar-->
@@ -132,5 +122,25 @@
           </div>
         </div>
       </div>
+        <!-- Socket.io -->
+        <script src="https://cdn.socket.io/3.1.3/socket.io.js"></script>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap 4 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <script src="../js/crear_semana.js"></script>
+
+        <!--socket para creación de semana-->
+      <script src="https://cdn.socket.io/3.1.3/socket.io.js"></script>
+      <script>
+        // Código del socket para el proceso de creación de semana
+        var socketCrearSemana = io.connect('http://localhost:3000/');
+        // Resto del código relacionado con el proceso de creación de semana
+        // ...
+      </script>
   </body>
 </html>

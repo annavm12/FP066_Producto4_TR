@@ -1,10 +1,10 @@
 const express = require('express');
-const { ApolloServer,gql } = require('apollo-server-express');
+const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const socketio = require('socket.io');
-const multer = require('multer');
-
+const socketIO = require('socket.io');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 
 // Conectar a la base de datos de MongoDB
 mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/test', {
@@ -189,8 +189,7 @@ module.exports = resolvers;
 
 // Crear un servidor Apollo
 const server = new ApolloServer({ typeDefs, resolvers });
-const {createServer} = require('http');
-const {Server} = require('socket.io');
+
 
 
 
@@ -206,17 +205,27 @@ const io = new Server(httpServer,{
   origin:'*'},
 });
 
-io.on('connection', (socket)=>{
+io.on('connection', (socket) => {
   console.log('conectado', socket.id);
 
-  socket.on('disconnect', () =>{
+  socket.on('disconnect', () => {
     console.log('desconectado', socket.id);
   });
+
+  // Manejar evento cuando se abre el modal
+  socket.on('modalAbierto', () => {
+    // Lógica para abrir el modal
+
+    // Emitir mensaje de confirmación al cliente
+    socket.emit('modalAbiertoOK', 'El modal se ha abierto correctamente');
+  });
+
+  // Otros eventos y lógica de Socket.IO
 });
 httpServer.listen(3000, () => console.log('Servidor iniciado'));
 
 startServer();
 
 // Iniciar el servidor Express
-//app.listen(3000, () => console.log('Servidor iniciado'));
+//app.listen(3000, () => console.log('Servidor iniciado'));*/
 
