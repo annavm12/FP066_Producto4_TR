@@ -6,6 +6,8 @@ const socketIO = require('socket.io');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
+
+
 // Conectar a la base de datos de MongoDB
 mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/test', {
   useNewUrlParser: true,
@@ -13,18 +15,6 @@ mongoose.connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/
 })
   .then(() => console.log('Conectado a la base de datos'))
   .catch((error) => console.log('Error al conectar a la base de datos:', error));
-
-
-//guardar archivos en local
-const guardado = multer.diskStorage({
-  destination: (req, file, cb) =>{
-    cb(null,'assets/');
-  },
-  filename: (req, file, cb)=>{
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({guardado});
 
 //controladores y modelos  
   const Semana = require('./models/semana.js');
@@ -47,9 +37,8 @@ const upload = multer({guardado});
     app.put('/tarea/:id', tareaController.updateTarea);
     app.put('/tarea', tareaController.updateTareas)
     app.delete('/tarea/:id', tareaController.deleteTarea);
-    app.post('tareas/upload', upload.single('archivo'), (req,res)=>{
-      res.send('Archivo guardado');
-    });
+
+   
     
 
 const typeDefs = `
@@ -155,41 +144,60 @@ const resolvers = {
     nuevaSemana: async (_, { input }) => {
       const semana = new Semana(input);
       await semana.save();
+      io.emit('nuevaSemana', semana);
+
       return semana;
     },
     actualizarSemana: async (_, { input }) => {
       const { id, ...actualizaciones } = input;
       const semana = await Semana.findByIdAndUpdate(id, actualizaciones, { new: true });
+      io.emit('actualizarSemana', semana)
       return semana;
     },
     eliminarSemana: async (_, { id }) => {
       await Semana.findByIdAndDelete(id);
+      io.emit('eliminarSemana', semana)
       return id;
     },
     nuevaTarea: async (_, { input }) => {
       const tarea = new Tarea(input);
       await tarea.save();
+      io.emit('nuevaTarea', tarea)
       return tarea;
     },
     actualizarTarea: async (_, { input }) => {
       const { id, ...actualizaciones } = input;
       const tarea = await Tarea.findByIdAndUpdate(id, actualizaciones, { new: true });
+      io.emit('actualizarTarea', tarea)
       return tarea;
     },
     eliminarTarea: async (_, { id }) => {
       await Tarea.findByIdAndDelete(id);
+      io.emit('eliminarTarea', tarea)
       return id;
     }
   },
  
 };
 
-module.exports = resolvers;
-
-
 // Crear un servidor Apollo
 const server = new ApolloServer({ typeDefs, resolvers });
 
+const httpServer = createServer(app);
+const io = new Server(httpServer,{
+  cors:{ 
+  origin:'*'},
+});
+const notifyTaskNotification = (message) =>{
+  io.emit('taskNotification', message);
+}
+const notifyError = (message) =>{
+  io.emit('error', message);
+}
+
+io.on('connection',(socket)=>{
+  console.log('user connected');
+})
 
 
 
@@ -197,35 +205,9 @@ const server = new ApolloServer({ typeDefs, resolvers });
 async function startServer() {
   await server.start();
   server.applyMiddleware({ app });
+
 }
 
-const httpServer = createServer(app);
-const io = new Server(httpServer,{
-  cors:{ 
-  origin:'*'},
-});
-
-io.on('connection', (socket) => {
-  console.log('conectado', socket.id);
-
-  socket.on('disconnect', () => {
-    console.log('desconectado', socket.id);
-  });
-
-  // Manejar evento cuando se abre el modal
-  socket.on('modalAbierto', () => {
-    // Lógica para abrir el modal
-
-    // Emitir mensaje de confirmación al cliente
-    socket.emit('modalAbiertoOK', 'El modal se ha abierto correctamente');
-  });
-
-  // Otros eventos y lógica de Socket.IO
-});
 httpServer.listen(3000, () => console.log('Servidor iniciado'));
 
 startServer();
-
-// Iniciar el servidor Express
-//app.listen(3000, () => console.log('Servidor iniciado'));*/
-
