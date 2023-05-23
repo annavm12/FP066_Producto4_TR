@@ -188,7 +188,7 @@ const io = new Server(httpServer,{
   cors:{ 
   origin:'*'},
 });
-const notifyTaskNotification = (message) =>{
+/*const notifyTaskNotification = (message) =>{
   io.emit('taskNotification', message);
 }
 const notifyError = (message) =>{
@@ -197,7 +197,7 @@ const notifyError = (message) =>{
 
 io.on('connection',(socket)=>{
   console.log('user connected');
-})
+})*/
 
 
 
