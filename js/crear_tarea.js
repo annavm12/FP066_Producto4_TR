@@ -1,6 +1,6 @@
 
 function refrescarTareas(){
-  fetch('http://localhost:3000/graphql',{
+  fetch('http://localhost:3000/',{
     method: 'POST',
     headers: {
       'Content-Type':'application/json',
@@ -64,7 +64,7 @@ function crearTarea() {
     };
   
     // Realizar la solicitud de creación de la tarea al servidor
-  fetch("http://localhost:3000/graphql", {
+  fetch("http://localhost:3000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -179,7 +179,7 @@ function crearTarea() {
                 nombre
               }
             }`;
-          fetch('http://localhost:3000/graphql',{
+          fetch('http://localhost:3000/',{
             method: 'POST',
             headers: {
               'Content-Type' : 'application/json',
