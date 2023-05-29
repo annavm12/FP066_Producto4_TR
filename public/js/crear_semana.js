@@ -7,7 +7,7 @@ function eliminarSemana(id) {
       }
     }`;
 
-  fetch("http://localhost:3000", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function crearCard() {
     color
   };
 
-  fetch("http://localhost:3000/", {
+  fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

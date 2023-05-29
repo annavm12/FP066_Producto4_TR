@@ -193,6 +193,9 @@ const io = new Server(httpServer, {
 
 // Middleware para servir el archivo HTML
 app.use(express.static('public/html'));
+app.use(express.static('public/css'));
+app.use(express.static('public/media'));
+
 
 // Iniciar el servidor Apollo y conectarlo con Express
 async function startServer() {
