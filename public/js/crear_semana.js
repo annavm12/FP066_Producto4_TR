@@ -137,6 +137,10 @@ function crearCard() {
   button1.style.marginRight = "10px";
   button1.style.marginLeft = "5px";
 
+  button1.addEventListener("click",function(){
+      window.location.href="tareas_pendientes.html";
+  })
+
   let button2 = document.createElement("button");
   button2.className = "btn btn-secondary btn-sm";
   button2.textContent = "Eliminar";

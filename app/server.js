@@ -214,6 +214,12 @@ app.use(express.static('public/js'));
 app.use(express.static('public/html'));
 app.use(express.static('public/css'));
 app.use(express.static('public/media'));
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
 
 // Iniciar el servidor Apollo
 startServer();
