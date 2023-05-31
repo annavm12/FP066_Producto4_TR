@@ -1,9 +1,9 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const { PubSub } = require('graphql-subscriptions');
 
 // Conectar a la base de datos de MongoDB
 mongoose
@@ -22,7 +22,6 @@ const tareaController = require('./controllers/tareacontroller.js');
 
 // Crear una instancia de Express
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -39,21 +38,16 @@ app.delete('/tarea/:id', tareaController.deleteTarea);
 
 // Definir el esquema de GraphQL
 const typeDefs = gql`
-type Semana {
-  id: ID!
-  semana: Int!
-  anio: Int!
-  descripcion: String!
-  mes: String!
-  horas: Int!
-  color: String!
-}
-type Mutation {
-  crearSemana(semana: Int!, anio: Int!, descripcion: String!, mes: String!, horas: Int!, color: String!): Semana!
-}
-schema {
-  mutation: Mutation
-}  
+  type Semana {
+    id: ID!
+    semana: Int!
+    anio: Int!
+    descripcion: String!
+    mes: String!
+    horas: Int!
+    color: String!
+  }
+
   type Tarea {
     id: ID!
     nombre: String!
@@ -116,75 +110,95 @@ schema {
   }
 
   type Mutation {
-    actualizarSemana(input: ActualizarSemanaInput): Semana
-    eliminarSemana(id: ID!): ID
-    nuevaTarea(input: NuevaTareaInput): Tarea
-    actualizarTarea(input: ActualizarTareaInput): Tarea
-    eliminarTarea(id: ID!): ID
+    crearSemana(input: NuevaSemanaInput!): Semana
+    actualizarSemana(input: ActualizarSemanaInput!): Semana
+    eliminarSemana(id: ID!): String
+    crearTarea(input: NuevaTareaInput!): Tarea
+    actualizarTarea(input: ActualizarTareaInput!): Tarea
+    eliminarTarea(id: ID!): String
+  }
+
+  type Subscription {
+    nuevaSemana: Semana
+    actualizacionSemana: Semana
+    eliminacionSemana: String
+    nuevaTarea(contenedorId: ID!): Tarea
+    actualizacionTarea(contenedorId: ID!): Tarea
+    eliminacionTarea(contenedorId: ID!): String
   }
 `;
 
-// Resolver para GraphQL
+// Definir resolvers para resolver las operaciones de la API
 const resolvers = {
   Query: {
-    obtenerSemana: async (_, { id }) => {
-      const semana = await Semana.findById(id);
-      return semana;
-    },
-    obtenerSemanas: async () => {
-      const semanas = await Semana.find();
-      return semanas;
-    },
-    obtenerTarea: async (_, { id }) => {
-      const tarea = await Tarea.findById(id);
-      return tarea;
-    },
-    obtenerTareas: async () => {
-      const tareas = await Tarea.find();
-      return tareas;
-    }
+    obtenerSemana: (_, { id }) => Semana.findById(id),
+    obtenerSemanas: () => Semana.find(),
+    obtenerTarea: (_, { id }) => Tarea.findById(id),
+    obtenerTareas: () => Tarea.find(),
   },
   Mutation: {
-    nuevaSemana: async (_, { input }) => {
+    crearSemana: (_, { input }) => {
       const semana = new Semana(input);
-      await semana.save();
-      io.emit('nuevaSemana', semana);
-
+      semana.save();
       return semana;
     },
-    actualizarSemana: async (_, { input }) => {
-      const { id, ...actualizaciones } = input;
-      const semana = await Semana.findByIdAndUpdate(id, actualizaciones, { new: true });
-      io.emit('actualizarSemana', semana);
-      return semana;
+    actualizarSemana: (_, { input }) => {
+      return Semana.findByIdAndUpdate(input.id, input, { new: true });
     },
     eliminarSemana: async (_, { id }) => {
       await Semana.findByIdAndDelete(id);
-      io.emit('eliminarSemana', semana);
-      return id;
+      return 'Semana eliminada correctamente';
     },
-    nuevaTarea: async (_, { input }) => {
+    crearTarea: (_, { input }) => {
       const tarea = new Tarea(input);
-      await tarea.save();
-      io.emit('nuevaTarea', tarea);
+      tarea.save();
       return tarea;
     },
-    actualizarTarea: async (_, { input }) => {
-      const { id, ...actualizaciones } = input;
-      const tarea = await Tarea.findByIdAndUpdate(id, actualizaciones, { new: true });
-      io.emit('actualizarTarea', tarea);
-      return tarea;
+    actualizarTarea: (_, { input }) => {
+      return Tarea.findByIdAndUpdate(input.id, input, { new: true });
     },
     eliminarTarea: async (_, { id }) => {
       await Tarea.findByIdAndDelete(id);
-      io.emit('eliminarTarea', tarea);
-      return id;
-    }
-  }
+      return 'Tarea eliminada correctamente';
+    },
+  },
+  Subscription: {
+    nuevaSemana: {
+      subscribe: () => pubsub.asyncIterator(['NUEVA_SEMANA']),
+    },
+    actualizacionSemana: {
+      subscribe: () => pubsub.asyncIterator(['ACTUALIZACION_SEMANA']),
+    },
+    eliminacionSemana: {
+      subscribe: () => pubsub.asyncIterator(['ELIMINACION_SEMANA']),
+    },
+    nuevaTarea: {
+      subscribe: (_, { contenedorId }) =>
+        pubsub.asyncIterator([`NUEVA_TAREA_${contenedorId}`]),
+    },
+    actualizacionTarea: {
+      subscribe: (_, { contenedorId }) =>
+        pubsub.asyncIterator([`ACTUALIZACION_TAREA_${contenedorId}`]),
+    },
+    eliminacionTarea: {
+      subscribe: (_, { contenedorId }) =>
+        pubsub.asyncIterator([`ELIMINACION_TAREA_${contenedorId}`]),
+    },
+  },
 };
 
-// Crear un servidor Apollo
-const server = new ApolloServer({ typeDefs, resolvers });
+// Crear el servidor Apollo
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => ({ pubsub }),
+});
+
+// Conectar el servidor Apollo con Express
+async function startServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+}
 
 // Crear el servidor HTTP
 const httpServer = createServer(app);
@@ -192,32 +206,19 @@ const httpServer = createServer(app);
 // Configurar Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: '*'
-  }
+    origin: '*',
+  },
 });
 
-// Middleware para servir el archivo HTML
 app.use(express.static('public/js'));
 app.use(express.static('public/html'));
 app.use(express.static('public/css'));
 app.use(express.static('public/media'));
-app.use((req, res, next) => {
-  if (req.url.endsWith('.js')) {
-    res.setHeader('Content-Type', 'application/javascript');
-  }
-  next();
-});
 
-// Iniciar el servidor Apollo y conectarlo con Express
-async function startServer() {
-  await server.start();
-  server.applyMiddleware({ app });
-}
+// Iniciar el servidor Apollo
+startServer();
 
 // Iniciar el servidor HTTP
 httpServer.listen(3000, () => {
   console.log(`Servidor web en http://localhost:3000`);
 });
-
-// Iniciar el servidor Apollo
-startServer();
