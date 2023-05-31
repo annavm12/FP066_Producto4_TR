@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Definir rutas
 app.get('/semana/', semanaController.getSemana);
-app.post('/semana', semanaController.createSemana);
+app.post('/semana', semanaController.crearSemana);
 app.put('/semana/:id', semanaController.updateSemana);
 app.delete('/semana/:id', semanaController.deleteSemana);
 app.get('/tarea/:id', tareaController.getTareas);
@@ -39,15 +39,21 @@ app.delete('/tarea/:id', tareaController.deleteTarea);
 
 // Definir el esquema de GraphQL
 const typeDefs = gql`
-  type Semana {
-    id: ID!
-    semana: Int!
-    anio: Int!
-    descripcion: String!
-    mes: String!
-    horas: Int!
-    color: String!
-  }
+type Semana {
+  id: ID!
+  semana: Int!
+  anio: Int!
+  descripcion: String!
+  mes: String!
+  horas: Int!
+  color: String!
+}
+type Mutation {
+  crearSemana(semana: Int!, anio: Int!, descripcion: String!, mes: String!, horas: Int!, color: String!): Semana!
+}
+schema {
+  mutation: Mutation
+}  
   type Tarea {
     id: ID!
     nombre: String!
@@ -110,7 +116,6 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    nuevaSemana(input: NuevaSemanaInput): Semana
     actualizarSemana(input: ActualizarSemanaInput): Semana
     eliminarSemana(id: ID!): ID
     nuevaTarea(input: NuevaTareaInput): Tarea
@@ -192,10 +197,16 @@ const io = new Server(httpServer, {
 });
 
 // Middleware para servir el archivo HTML
+app.use(express.static('public/js'));
 app.use(express.static('public/html'));
 app.use(express.static('public/css'));
 app.use(express.static('public/media'));
-
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
 
 // Iniciar el servidor Apollo y conectarlo con Express
 async function startServer() {

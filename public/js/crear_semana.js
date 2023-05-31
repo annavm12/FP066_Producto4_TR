@@ -1,7 +1,7 @@
 function eliminarSemana(id) {
   const deleteSemanaQuery = `
-    mutation{
-      deleteSemana(id:"${id}"){
+    mutation DeleteSemana($id: ID!) {
+      deleteSemana(id: $id) {
         id
         semana
       }
@@ -13,7 +13,10 @@ function eliminarSemana(id) {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({ query: deleteSemanaQuery }),
+    body: JSON.stringify({
+      query: deleteSemanaQuery,
+      variables: { id },
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -30,7 +33,7 @@ function eliminarSemana(id) {
   if (card) {
     card.remove();
   }
-  
+
   // Cerrar el modal de confirmación
   let modal = document.getElementById("eliminar-modal");
   $(modal).modal("hide");
@@ -41,12 +44,11 @@ function eliminarSemana(id) {
 }
 
 function crearCard() {
-
-  const form = document.querySelector('form');
+  const form = document.querySelector("form");
   if (!form.checkValidity()) {
-      const errorMessage = document.querySelector('.error-message');
-      errorMessage.style.display = 'block';
-      return; // salimos de la función si el formulario no es válido
+    const errorMessage = document.querySelector(".error-message");
+    errorMessage.style.display = "block";
+    return; // Salir de la función si el formulario no es válido
   }
 
   // Obtener los valores de los inputs
@@ -59,7 +61,7 @@ function crearCard() {
 
   // Verificar que todos los campos requeridos tengan valor
   if (!semana || !anio || !descripcion || !mes || !horas || !color) {
-      return; // salimos de la función si algún campo requerido está vacío
+    return; // Salir de la función si algún campo requerido está vacío
   }
 
   const semanaData = {
@@ -68,28 +70,21 @@ function crearCard() {
     descripcion,
     mes,
     horas,
-    color
+    color,
   };
 
   fetch("http://localhost:3000/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json"
+      Accept: "application/json",
     },
     body: JSON.stringify({
       query: `
-        mutation {
-          crearTarea(input: {
-            semana: "${semanaData.semana}",
-            anio: "${semanaData.anio}",
-            descripcion: "${semanaData.descripcion}",
-            mes: "${semanaData.mes}",
-            horas: "${semanaData.horas}",
-            color: "${semanaData.color}"
-          }) {
+        mutation CrearSemana($input: SemanaInput!) {
+          crearSemana(input: $input) {
             id
-            nombre
+            semana
             anio
             descripcion
             mes
@@ -97,37 +92,27 @@ function crearCard() {
             color
           }
         }
-      `
-    })
+      `,
+      variables: { input: semanaData },
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
-      const nuevaSemana = data.data.crearCard;
-      console.log("Nueva tarea creada:", nuevaSemana);
-      
-      // Mostrar la nueva tarea en la página
-      mostrarTarea(nuevaSemana);
+      const nuevaSemana = data.data.crearSemana;
+      console.log("Nueva semana creada:", nuevaSemana);
     })
     .catch((error) => {
-      console.error("Error al crear la tarea:", error);
+      console.error("Error al crear la semana:", error);
     });
 
-  let fondo = document.createElement("div");
-  fondo.className = "fondo";
-  fondo.style.backgroundColor = "#F6F1D1";
-
-  
-
-
-// Crear el elemento card 
+  // Crear el elemento card
   let card = document.createElement("div");
-  let cardId ="card-" + Date.now().toString();
-  card.setAttribute("id",cardId);
+  let cardId = "card-" + Date.now().toString();
+  card.setAttribute("id", cardId);
   card.className = "card";
   card.style.backgroundColor = color;
   card.style.width = "320px";
   card.style.height = "250px";
-
 
   // Crear el contenido de la card
   let cardBody = document.createElement("div");
@@ -138,7 +123,7 @@ function crearCard() {
   let cardText = document.createElement("p");
   cardText.className = "card-text";
   cardText.style.maxHeight = "80px";
-  cardText.style.overflow = "hidden"; 
+  cardText.style.overflow = "hidden";
   cardText.textContent = descripcion;
   let cardFooter = document.createElement("div");
   cardFooter.className = "card-footer";
@@ -148,61 +133,43 @@ function crearCard() {
   let button1 = document.createElement("button");
   button1.className = "btn btn-primary btn-sm";
   button1.textContent = "Detalles";
-  button1.style.backgroundColor = "#CFD7C7";
-  button1.onclick = function() {
-      window.location.href = "../html/tareas_pendientes.html";
-  };
-  button1.style.backgroundColor = "#70A9A1"; 
+  button1.style.backgroundColor = "#70A9A1";
   button1.style.marginRight = "10px";
   button1.style.marginLeft = "5px";
 
   let button2 = document.createElement("button");
   button2.className = "btn btn-secondary btn-sm";
   button2.textContent = "Eliminar";
-  button2.setAttribute("data-toggle", "modal"); 
+  button2.setAttribute("data-toggle", "modal");
   button2.setAttribute("data-target", "#eliminar-modal");
-  button2.style.backgroundColor = "#E40066"; 
-  button2.style.marginRight = "0"; 
+  button2.style.backgroundColor = "#E40066";
+  button2.style.marginRight = "0";
 
- // Añadir el evento "click" al botón2
- button2.addEventListener("click", function () {
-  let cardId = card.getAttribute("id");
-  // Obtener el modal de confirmación
-  let modal = document.getElementById("eliminar-modal");
+  // Añadir el evento "click" al botón2
+  button2.addEventListener("click", function () {
+    let cardId = card.getAttribute("id");
+    // Obtener el modal de confirmación
+    let modal = document.getElementById("eliminar-modal");
 
-  // Añadir el evento "click" al botón "Eliminar" del modal
-  let eliminarBtn = modal.querySelector(".btn-danger");
+    // Añadir el evento "click" al botón "Eliminar" del modal
+    let eliminarBtn = modal.querySelector(".btn-danger");
 
-  eliminarBtn.addEventListener("click", function () {
-    // Eliminar la semana
-    eliminarSemana(cardId);
+    eliminarBtn.addEventListener("click", function () {
+      // Eliminar la semana
+      eliminarSemana(cardId);
 
-    // Cerrar el modal de confirmación
-    $(modal).modal("hide");
+      // Cerrar el modal de confirmación
+      $(modal).modal("hide");
+    });
+
+    // Mostrar el modal de confirmación
+    $(modal).modal("show");
   });
-
-  // Mostrar el modal de confirmación
-  $(modal).modal("show");
-});
-
-  
-  /*eliminarBtn.addEventListener("click", function() {
-  
-      card.remove();
-  // Cerrar el modal de confirmación
-  $(modal).modal('hide');
-  });
-
-  // Mostrar el modal de confirmación
-  $(modal).modal('show');
-  });*/
-
 
   cardFooter.appendChild(button1);
   cardFooter.appendChild(button2);
 
   // Añadir el contenido a la card
-
   cardBody.appendChild(cardTitle);
   cardBody.appendChild(cardText);
   cardFooter.appendChild(cardFooterText);
@@ -210,14 +177,15 @@ function crearCard() {
   cardFooter.appendChild(button2);
   card.appendChild(cardBody);
   card.appendChild(cardFooter);
-  fondo.appendChild(card);
-  
-      // Cerrar el modal
-      let modal = document.getElementById("anadir-semana");
-      $(modal).modal('hide');
+
   // Añadir la card al contenedor
   let contenedor = document.getElementById("contenedor-cards");
   contenedor.appendChild(card);
+
+  // Cerrar el modal
+  let modal = document.getElementById("anadir-semana");
+  $(modal).modal("hide");
+
   // Resetear el formulario
-  document.getElementById("formulario").reset();
+  form.reset();
 }
