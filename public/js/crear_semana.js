@@ -52,11 +52,11 @@ function crearCard() {
   }
 
   // Obtener los valores de los inputs
-  let semana = document.getElementById("semana-input").value;
-  let anio = document.getElementById("anio-input").value;
+  let semana = parseInt(document.getElementById("semana-input").value);
+  let anio = parseInt(document.getElementById("anio-input").value);
   let descripcion = document.getElementById("descripcion-input").value;
   let mes = document.getElementById("mes-input").value;
-  let horas = document.getElementById("horas-input").value;
+  let horas = parseInt(document.getElementById("horas-input").value);
   let color = document.getElementById("color-select").value;
 
   // Verificar que todos los campos requeridos tengan valor
@@ -72,6 +72,7 @@ function crearCard() {
     horas,
     color,
   };
+  console.log(semanaData)
 
   fetch("http://localhost:3000/graphql", {
     method: "POST",
@@ -81,7 +82,7 @@ function crearCard() {
     },
     body: JSON.stringify({
       query: `
-        mutation CrearSemana($input: SemanaInput!) {
+        mutation CrearSemana($input: NuevaSemanaInput!) {
           crearSemana(input: $input) {
             id
             semana
@@ -98,7 +99,7 @@ function crearCard() {
   })
     .then((response) => response.json())
     .then((data) => {
-      const nuevaSemana = data.data.crearSemana;
+      const nuevaSemana = data;
       console.log("Nueva semana creada:", nuevaSemana);
     })
     .catch((error) => {

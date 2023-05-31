@@ -13,7 +13,7 @@ semanaController.crearSemana = async (req,res)=>{
   res.status(201).json(nuevaSemana);
 };
 
-semanaController.updateSemana=async (req,res) =>{
+semanaController.updateSemana = async (req,res) =>{
   const semanaId = req.params.id;
   const updateSemana =await Semana.findByIdAndUpdate(semanaId, req.body, {new: true});
   res.json(updateSemana);

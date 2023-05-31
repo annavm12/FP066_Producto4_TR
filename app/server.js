@@ -3,7 +3,7 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const { PubSub } = require('graphql-subscriptions');
+const { pubsub } = require('graphql-subscriptions');
 
 // Conectar a la base de datos de MongoDB
 mongoose
