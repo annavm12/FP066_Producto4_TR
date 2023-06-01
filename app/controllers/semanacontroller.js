@@ -7,10 +7,15 @@ semanaController.getSemana = async (req,res) =>{
   resizeTo.json(semanas);
 };
 
-semanaController.crearSemana = async (req,res)=>{
-  const nuevaSemana = new Semana(req.body);
-  await nuevaSemana.save();
-  res.status(201).json(nuevaSemana);
+semanaController.crearSemana = async (req, res) => {
+  try {
+    const nuevaSemana = new Semana(req.body);
+    await nuevaSemana.save();
+    res.status(201).json(nuevaSemana);
+  } catch (error) {
+    console.log('Error al crear una nueva semana:', error);
+    res.status(500).json({ error: 'Error al crear una nueva semana' });
+  }
 };
 
 semanaController.updateSemana = async (req,res) =>{

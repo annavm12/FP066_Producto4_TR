@@ -4,34 +4,32 @@ const semanaSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   semana: {
     type: Number,
-    required: true
+    required: true,
   },
   anio: {
     type: Number,
-    required: true
+    required: true,
   },
   descripcion: {
     type: String,
-    required: true
+    required: true,
   },
   mes: {
     type: String,
-    required: true
+    required: true,
   },
   horas: {
     type: Number,
-    required: true
+    required: true,
   },
   color: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const Semana = mongoose.model('Semana', semanaSchema);
-
-module.exports = Semana;
+module.exports = mongoose.model('Semana', semanaSchema);

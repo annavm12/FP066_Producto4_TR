@@ -63,8 +63,9 @@ function crearCard() {
   if (!semana || !anio || !descripcion || !mes || !horas || !color) {
     return; // Salir de la función si algún campo requerido está vacío
   }
-
+  const id = uuidv4();
   const semanaData = {
+    id, 
     semana,
     anio,
     descripcion,
@@ -82,7 +83,7 @@ function crearCard() {
     },
     body: JSON.stringify({
       query: `
-        mutation CrearSemana($input: NuevaSemanaInput!) {
+        mutation CrearSemana($input: SemanaInput!) {
           crearSemana(input: $input) {
             id
             semana
@@ -95,11 +96,13 @@ function crearCard() {
         }
       `,
       variables: { input: semanaData },
+     
     }),
   })
     .then((response) => response.json())
     .then((data) => {
       const nuevaSemana = data;
+      console.log(semanaData);
       console.log("Nueva semana creada:", nuevaSemana);
     })
     .catch((error) => {

@@ -3,7 +3,8 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const { pubsub } = require('graphql-subscriptions');
+const bodyParser = require('body-parser');
+const { PubSub } = require('graphql-subscriptions');
 
 // Conectar a la base de datos de MongoDB
 mongoose
@@ -24,6 +25,8 @@ const tareaController = require('./controllers/tareacontroller.js');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Definir rutas
 app.get('/semana/', semanaController.getSemana);
@@ -38,15 +41,15 @@ app.delete('/tarea/:id', tareaController.deleteTarea);
 
 // Definir el esquema de GraphQL
 const typeDefs = gql`
-  type Semana {
-    id: ID!
-    semana: Int!
-    anio: Int!
-    descripcion: String!
-    mes: String!
-    horas: Int!
-    color: String!
-  }
+type Semana {
+  id: ID!
+  semana: Int!
+  anio: Int!
+  descripcion: String!
+  mes: String!
+  horas: Int!
+  color: String!
+}
 
   type Tarea {
     id: ID!
@@ -60,7 +63,7 @@ const typeDefs = gql`
     archivo: String
   }
 
-  input NuevaSemanaInput {
+  input SemanaInput {
     semana: Int!
     anio: Int!
     descripcion: String!
@@ -110,7 +113,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    crearSemana(input: NuevaSemanaInput!): Semana
+    crearSemana(input: SemanaInput!): Semana!
     actualizarSemana(input: ActualizarSemanaInput!): Semana
     eliminarSemana(id: ID!): String
     crearTarea(input: NuevaTareaInput!): Tarea
@@ -137,9 +140,9 @@ const resolvers = {
     obtenerTareas: () => Tarea.find(),
   },
   Mutation: {
-    crearSemana: (_, { input }) => {
+    crearSemana: async (_, { input }) => {
       const semana = new Semana(input);
-      semana.save();
+      await semana.save();
       return semana;
     },
     actualizarSemana: (_, { input }) => {
@@ -188,6 +191,7 @@ const resolvers = {
 };
 
 // Crear el servidor Apollo
+const pubsub = new PubSub();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -208,6 +212,15 @@ const io = new Server(httpServer, {
   cors: {
     origin: '*',
   },
+});
+io.on('connection',(socket) =>{
+  console.log('Nueva conexion de Websocket');
+    socket.on('message', (data)=>{
+      console.log('mensaje recibido', data);
+    });
+  socket.on('disconnect',() =>{
+    console.log('desconectado de WebSocket');
+  });
 });
 
 app.use(express.static('public/js'));
