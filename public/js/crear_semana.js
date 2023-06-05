@@ -1,6 +1,6 @@
-function eliminarSemana(id) {
+function deleteSemana(id) {
   const deleteSemanaQuery = `
-    mutation DeleteSemana($id: ID!) {
+    mutation deleteSemana($id: ID!) {
       deleteSemana(id: $id) {
         id
         semana
@@ -20,7 +20,7 @@ function eliminarSemana(id) {
   })
     .then((response) => response.json())
     .then((data) => {
-      const deletedSemana = data.data.deleteSemana;
+      const deletedSemana = data.deleteSemana;
       console.log("Semana borrada", deletedSemana);
       location.reload();
     })
@@ -40,7 +40,7 @@ function eliminarSemana(id) {
 
   // Remover el evento "click" del botón "Eliminar" del modal
   let eliminarBtn = modal.querySelector(".btn-danger");
-  eliminarBtn.removeEventListener("click", eliminarSemana);
+  eliminarBtn.removeEventListener("click", deleteSemana);
 }
 
 function crearCard() {
@@ -164,7 +164,7 @@ function crearCard() {
 
     eliminarBtn.addEventListener("click", function () {
       // Eliminar la semana
-      eliminarSemana(cardId);
+      deleteSemana(cardId);
 
       // Cerrar el modal de confirmación
       $(modal).modal("hide");

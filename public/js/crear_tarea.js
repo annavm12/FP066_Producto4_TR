@@ -60,7 +60,8 @@ function crearTarea() {
       horaFinal,
       descripcion,
       colaboradores,
-      prioridad
+      prioridad,
+      complete,
     };
   
     // Realizar la solicitud de creación de la tarea al servidor
@@ -79,7 +80,8 @@ function crearTarea() {
             horaFinal: "${tareaData.horaFinal}",
             descripcion: "${tareaData.descripcion}",
             colaboradores: "${tareaData.colaboradores}",
-            prioridad: "${tareaData.prioridad}"
+            prioridad: "${tareaData.prioridad}",
+            complete: "${tareaData.complete}",
           }) {
             id
             nombre
@@ -89,7 +91,6 @@ function crearTarea() {
             colaboradores
             prioridad
             complete
-            archivo
           }
         }
       `
@@ -97,7 +98,7 @@ function crearTarea() {
   })
     .then((response) => response.json())
     .then((data) => {
-      const nuevaTarea = data.data.crearTarea;
+      const nuevaTarea = data;
       console.log("Nueva tarea creada:", nuevaTarea);
       
       // Mostrar la nueva tarea en la página

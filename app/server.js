@@ -60,7 +60,6 @@ type Semana {
     colaboradores: String!
     prioridad: String!
     complete: Boolean
-    archivo: String
   }
 
   input SemanaInput {
@@ -116,7 +115,7 @@ type Semana {
   type Mutation {
     crearSemana(input: SemanaInput!): Semana!
     actualizarSemana(input: ActualizarSemanaInput!): Semana
-    eliminarSemana(id: ID!): String
+    deleteSemana(id: ID!): String!
     crearTarea(input: NuevaTareaInput!): Tarea
     actualizarTarea(input: ActualizarTareaInput!): Tarea
     eliminarTarea(id: ID!): String
@@ -149,7 +148,7 @@ const resolvers = {
     actualizarSemana: (_, { input }) => {
       return Semana.findByIdAndUpdate(input.id, input, { new: true });
     },
-    eliminarSemana: async (_, { id }) => {
+    deleteSemana: async (_, { id }) => {
       await Semana.findByIdAndDelete(id);
       return 'Semana eliminada correctamente';
     },
