@@ -96,7 +96,7 @@ function crearCard() {
         }
       `,
       variables: { input: semanaData },
-     
+    
     }),
   })
     .then((response) => response.json())
