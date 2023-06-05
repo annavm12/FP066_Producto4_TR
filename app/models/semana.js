@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
+// Definir el esquema de la colección 'semanas'
 const semanaSchema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
-    unique: true,
   },
   semana: {
     type: Number,
@@ -32,4 +32,7 @@ const semanaSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Semana', semanaSchema);
+// Crear el modelo 'Semana' a partir del esquema
+const Semana = mongoose.model('Semana', semanaSchema);
+
+module.exports = Semana;

@@ -18,8 +18,8 @@ mongoose
 // Importar modelos y controladores
 const Semana = require('./models/semana.js');
 const Tarea = require('./models/tarea.js');
-const semanaController = require('./controllers/semanacontroller.js');
-const tareaController = require('./controllers/tareacontroller.js');
+//const semanaController = require('./controllers/semanacontroller.js');
+//const tareaController = require('./controllers/tareacontroller.js');
 
 // Crear una instancia de Express
 const app = express();
@@ -28,8 +28,55 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Ruta para obtener todas las semanas
+app.get('/semanas', async (req, res) => {
+  try {
+    const semanas = await Semana.find();
+    res.json(semanas);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener las semanas' });
+  }
+});
+// Ruta para obtener una semana por su ID
+app.get('/semanas/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const semana = await Semana.findById(id);
+    if (semana) {
+      res.json(semana);
+    } else {
+      res.status(404).json({ error: 'Semana no encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener la semana' });
+  }
+});
+// Ruta para crear una nueva semana
+app.post('/semanas', async (req, res) => {
+  try {
+    const semanaData = req.body;
+    const nuevaSemana = await Semana.create(semanaData);
+    res.status(201).json(nuevaSemana);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear la semana' });
+  }
+});
+// Ruta para eliminar una semana por su ID
+app.delete('/semanas/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const semanaEliminada = await Semana.findByIdAndDelete(id);
+    if (semanaEliminada) {
+      res.json(semanaEliminada);
+    } else {
+      res.status(404).json({ error: 'Semana no encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar la semana' });
+  }
+});
 // Definir rutas
-app.get('/semana/', semanaController.getSemana);
+/*app.get('/semana/', semanaController.getSemana);
 app.post('/semana', semanaController.crearSemana);
 app.put('/semana/:id', semanaController.updateSemana);
 app.delete('/semana/:id', semanaController.deleteSemana);
@@ -37,7 +84,7 @@ app.get('/tarea/:id', tareaController.getTareas);
 app.post('/tarea', tareaController.createTarea);
 app.put('/tarea/:id', tareaController.updateTarea);
 app.put('/tarea', tareaController.updateTareas);
-app.delete('/tarea/:id', tareaController.deleteTarea);
+app.delete('/tarea/:id', tareaController.deleteTarea);*/
 
 // Definir el esquema de GraphQL
 const typeDefs = gql`
