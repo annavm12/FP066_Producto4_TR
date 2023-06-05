@@ -83,7 +83,7 @@ function crearCard() {
     },
     body: JSON.stringify({
       query: `
-        mutation CrearSemana($input: SemanaInput!) {
+        mutation crearSemana($input: SemanaInput!) {
           crearSemana(input: $input) {
             id
             semana

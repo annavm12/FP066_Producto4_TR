@@ -64,6 +64,7 @@ type Semana {
   }
 
   input SemanaInput {
+    id: String!
     semana: Int!
     anio: Int!
     descripcion: String!
