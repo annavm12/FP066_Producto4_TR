@@ -101,7 +101,6 @@ function crearCard() {
     .then((response) => response.json())
     .then((data) => {
       const nuevaSemana = data;
-      console.log(semanaData);
       console.log("Nueva semana creada:", nuevaSemana);
     })
     .catch((error) => {

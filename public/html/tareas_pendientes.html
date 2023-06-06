@@ -190,7 +190,23 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+  <script>
+    // Aquí va el código JavaScript del cliente WebSocket
+    const ws = new WebSocket('ws://localhost:3000');
 
+    ws.addEventListener('open', () => {
+      console.log('Conexión de WebSocket establecida');
+    });
+
+    ws.addEventListener('message', (event) => {
+      const message = event.data;
+      console.log('Mensaje recibido:', message);
+    });
+
+    ws.addEventListener('close', () => {
+      console.log('Conexión de WebSocket cerrada');
+    });
+  </script>
 
 
 

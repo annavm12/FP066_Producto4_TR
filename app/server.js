@@ -2,10 +2,9 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const { createServer } = require('http');
-const { Server } = require('socket.io');
 const bodyParser = require('body-parser');
 const { PubSub } = require('graphql-subscriptions');
-
+const WebSocket = require('ws');
 // Conectar a la base de datos de MongoDB
 mongoose
   .connect('mongodb+srv://teamrocket:pokemon@cluster0.ohi0qi5.mongodb.net/test', {
@@ -128,6 +127,7 @@ type Semana {
     eliminacionTarea(contenedorId: ID!): String
   }
 `;
+const clients = new Set();
 
 // Definir resolvers para resolver las operaciones de la API
 const resolvers = {
@@ -141,6 +141,10 @@ const resolvers = {
     crearSemana: async (_, { input }) => {
       const semana = new Semana(input);
       await semana.save();
+      // Enviar mensaje a través de WebSocket a todos los clientes
+      clients.forEach((client) => {
+        client.send('Se ha creado una nueva semana');
+      });
       pubsub.publish('NUEVA_SEMANA', { nuevaSemana: semana });
       return semana;
     },
@@ -157,6 +161,10 @@ const resolvers = {
     crearTarea: (_, { input }) => {
       const tarea = new Tarea(input);
       tarea.save();
+      // Enviar mensaje a través de WebSocket
+      clients.forEach((client) => {
+        client.send('Se ha creado una nueva tarea');
+      });
       pubsub.publish(`NUEVA_TAREA_${input.contenedorId}`, { nuevaTarea: tarea });
       return tarea;
     },
@@ -205,30 +213,36 @@ const server = new ApolloServer({
   context: () => ({ pubsub }),
 });
 
+// Crear el servidor HTTP
+const httpServer = createServer(app);
+
+// Configurar WebSocket
+const wss = new WebSocket.Server({ server: httpServer });
+
+wss.on('connection', (ws) => {
+  console.log('Nueva conexión de WebSocket');
+
+  // Almacenar el cliente WebSocket en la variable `clients`
+  clients.add(ws);
+
+  ws.on('message', (message) => {
+    console.log('Mensaje recibido:', message);
+    // Aquí puedes realizar acciones con los datos recibidos
+  });
+
+  ws.on('close', () => {
+    console.log('Conexión de WebSocket cerrada');
+
+    // Eliminar el cliente WebSocket de la variable `clients` al cerrarse la conexión
+    clients.delete(ws);
+  });
+});
+
 // Conectar el servidor Apollo con Express
 async function startServer() {
   await server.start();
   server.applyMiddleware({ app });
 }
-
-// Crear el servidor HTTP
-const httpServer = createServer(app);
-
-// Configurar Socket.IO
-const io = new Server(httpServer, {
-  cors: {
-    origin: '*',
-  },
-});
-io.on('connection',(socket) =>{
-  console.log('Nueva conexion de Websocket');
-    socket.on('message', (data)=>{
-      console.log('mensaje recibido', data);
-    });
-  socket.on('disconnect',() =>{
-    console.log('desconectado de WebSocket');
-  });
-});
 
 app.use(express.static('public/js'));
 app.use(express.static('public/html'));
