@@ -59,7 +59,6 @@ type Semana {
     descripcion: String!
     colaboradores: String!
     prioridad: String!
-    complete: Boolean
   }
 
   input SemanaInput {
@@ -83,14 +82,13 @@ type Semana {
   }
 
   input NuevaTareaInput {
+    id: String!
     nombre: String!
     horaInicio: String!
     horaFinal: String!
     descripcion: String!
     colaboradores: String!
     prioridad: String!
-    complete: Boolean
-    contenedorId: ID!
   }
 
   input ActualizarTareaInput {
@@ -116,7 +114,7 @@ type Semana {
     crearSemana(input: SemanaInput!): Semana!
     actualizarSemana(input: ActualizarSemanaInput!): Semana
     deleteSemana(id: ID!): String!
-    crearTarea(input: NuevaTareaInput!): Tarea
+    crearTarea(input: NuevaTareaInput!): Tarea!
     actualizarTarea(input: ActualizarTareaInput!): Tarea
     eliminarTarea(id: ID!): String
   }

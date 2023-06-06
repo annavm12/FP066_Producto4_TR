@@ -54,14 +54,16 @@ function crearTarea() {
   }
   
     // Crear el objeto de datos para enviar en la solicitud
+    const id = uuidv4();
+
     const tareaData = {
+      id,
       nombre,
       horaInicio,
       horaFinal,
       descripcion,
       colaboradores,
       prioridad,
-      complete,
     };
   
     // Realizar la solicitud de creación de la tarea al servidor
@@ -73,16 +75,8 @@ function crearTarea() {
     },
     body: JSON.stringify({
       query: `
-        mutation {
-          crearTarea(input: {
-            nombre: "${tareaData.nombre}",
-            horaInicio: "${tareaData.horaInicio}",
-            horaFinal: "${tareaData.horaFinal}",
-            descripcion: "${tareaData.descripcion}",
-            colaboradores: "${tareaData.colaboradores}",
-            prioridad: "${tareaData.prioridad}",
-            complete: "${tareaData.complete}",
-          }) {
+        mutation crearTarea($input: NuevaTareaInput!) {
+          crearTarea(input: $input){
             id
             nombre
             horaInicio
@@ -90,10 +84,10 @@ function crearTarea() {
             descripcion
             colaboradores
             prioridad
-            complete
-          }
+          } 
         }
-      `
+      `,
+      variables: { input: tareaData },
     })
   })
     .then((response) => response.json())
@@ -101,8 +95,6 @@ function crearTarea() {
       const nuevaTarea = data;
       console.log("Nueva tarea creada:", nuevaTarea);
       
-      // Mostrar la nueva tarea en la página
-      mostrarTarea(nuevaTarea);
     })
     .catch((error) => {
       console.error("Error al crear la tarea:", error);

@@ -1,32 +1,31 @@
 function deleteSemana(id) {
-  const deleteSemanaQuery = `
-    mutation deleteSemana($id: ID!) {
-      deleteSemana(id: $id) {
-        id
-        semana
-      }
-    }`;
-
-  fetch("http://localhost:3000/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      query: deleteSemanaQuery,
-      variables: { id },
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const deletedSemana = data.deleteSemana;
-      console.log("Semana borrada", deletedSemana);
-      location.reload();
+  const deleteSemana = (id) => {
+    fetch('http://localhost:3000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          mutation {
+            deleteSemana(id: "${id}") {
+              id
+              nombre
+            }
+          }
+        `
+      }),
     })
-    .catch((error) => {
-      console.error("Error al eliminar la semana:", error);
+    .then(response => response.json())
+    .then(data => {
+      console.log('Semana eliminada:', data.deleteSemana);
+      // Realizar cualquier otra acción necesaria después de la eliminación
+    })
+    .catch(error => {
+      console.error('Error al eliminar la semana:', error);
     });
+  };
+  
 
   // Eliminar la tarjeta correspondiente al id
   let card = document.getElementById(id);
