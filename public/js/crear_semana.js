@@ -18,7 +18,7 @@ function deleteSemana(id) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Semana eliminada:', data.deleteSemana);
+      console.log('Semana eliminada:', data);
       // Realizar cualquier otra acción necesaria después de la eliminación
     })
     .catch(error => {
