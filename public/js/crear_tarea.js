@@ -1,4 +1,3 @@
-
 function refrescarTareas(){
   fetch('http://localhost:3000/graphql',{
     method: 'POST',
@@ -243,5 +242,8 @@ function crearTarea() {
     card.addEventListener("dragstart", drag);
     container.addEventListener("dragover", allowDrop);
     container.addEventListener("drop", drop);
+    card.addEventListener("dragstart", dragstart);
+    card.addEventListener("dragend", dragend);
+    card.dataset.prioridad = prioridad;
 }
 

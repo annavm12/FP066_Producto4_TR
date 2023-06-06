@@ -141,26 +141,35 @@ const resolvers = {
     crearSemana: async (_, { input }) => {
       const semana = new Semana(input);
       await semana.save();
+      pubsub.publish('NUEVA_SEMANA', { nuevaSemana: semana });
       return semana;
     },
     actualizarSemana: (_, { input }) => {
       return Semana.findByIdAndUpdate(input.id, input, { new: true });
+      pubsub.publish('ACTUALIZACION_SEMANA', { actualizacionSemana: updatedSemana });
+      return updatedSemana;
     },
     deleteSemana: async (_, { id }) => {
       await Semana.findByIdAndDelete(id);
+      pubsub.publish('ELIMINACION_SEMANA', { eliminacionSemana: 'Semana eliminada correctamente' });
       return 'Semana eliminada correctamente';
     },
     crearTarea: (_, { input }) => {
       const tarea = new Tarea(input);
       tarea.save();
+      pubsub.publish(`NUEVA_TAREA_${input.contenedorId}`, { nuevaTarea: tarea });
       return tarea;
     },
     actualizarTarea: (_, { input }) => {
       return Tarea.findByIdAndUpdate(input.id, input, { new: true });
+      pubsub.publish(`ACTUALIZACION_TAREA_${input.contenedorId}`, { actualizacionTarea: updatedTarea });
+      return updatedTarea;
     },
     eliminarTarea: async (_, { id }) => {
       await Tarea.findByIdAndDelete(id);
-      return 'Tarea eliminada correctamente';
+      pubsub.publish(`ELIMINACION_TAREA_${contenedorId}`, { eliminacionTarea: 'Tarea eliminada correctamente' });
+
+      return 'Tarea eliminada correctamente';    
     },
   },
   Subscription: {
