@@ -26,7 +26,7 @@ function refrescarTareas(){
   .then((response) => response.json())
   .then((data) => {
     console.log(data);
-    const tareas = data.data.tarea;
+    const tareas = data;
     tareas.forEach((tarea) => crearTarea(tarea));
   });
 }
@@ -182,7 +182,7 @@ function crearTarea() {
           })
           .then((response)=>response.json())
           .then((data) =>{
-            const deletedTarea = data.data.deleteTarea;
+            const deletedTarea = data;
             console.log('tarea borrada', deletedTarea);
             refrescarTareas();
             location.reload();
