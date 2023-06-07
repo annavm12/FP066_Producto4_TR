@@ -128,6 +128,8 @@ type Semana {
   }
 `;
 const clients = new Set();
+const pubsub = new PubSub();
+
 
 // Definir resolvers para resolver las operaciones de la API
 const resolvers = {
@@ -206,7 +208,6 @@ const resolvers = {
 };
 
 // Crear el servidor Apollo
-const pubsub = new PubSub();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
